@@ -1,0 +1,4 @@
+# This directory contains build assets for electron-builder
+# Place your provisioning profile (embedded.provisionprofile) here for Mac App Store builds
+# Place your icon file (icon.icns) here for the app icon
+

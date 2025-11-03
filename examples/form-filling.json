@@ -1,0 +1,60 @@
+[
+  {
+    "type": "type",
+    "params": {
+      "text": "john.doe@example.com"
+    },
+    "description": "Enter email address"
+  },
+  {
+    "type": "keypress",
+    "params": {
+      "key": "tab"
+    },
+    "description": "Move to password field"
+  },
+  {
+    "type": "wait",
+    "params": {
+      "duration": 300
+    },
+    "description": "Brief pause"
+  },
+  {
+    "type": "type",
+    "params": {
+      "text": "MySecurePassword123!"
+    },
+    "description": "Enter password"
+  },
+  {
+    "type": "keypress",
+    "params": {
+      "key": "tab"
+    },
+    "description": "Move to confirm password field"
+  },
+  {
+    "type": "wait",
+    "params": {
+      "duration": 300
+    },
+    "description": "Brief pause"
+  },
+  {
+    "type": "type",
+    "params": {
+      "text": "MySecurePassword123!"
+    },
+    "description": "Confirm password"
+  },
+  {
+    "type": "keypress",
+    "params": {
+      "key": "enter"
+    },
+    "description": "Submit form"
+  }
+]
+
+

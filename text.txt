@@ -1,0 +1,112 @@
+Yes, it is possible to create an auto clicker and screen mover with Electron on macOS, but there are key limitations and requirements to be aware of.
+
+---
+
+### Mouse Control Capabilities
+
+Electron, through Node.js, can simulate mouse movements and clicks using external libraries. It cannot do this natively.
+
+#### Common Node Libraries
+
+1. **robotjs** – Classic choice for mouse/keyboard automation.
+
+   ```bash
+   npm install robotjs
+   ```
+
+   ```js
+   const robot = require('robotjs');
+   robot.moveMouse(500, 300);
+   robot.mouseClick();
+   ```
+
+2. **@nut-tree/nut-js** – Actively maintained and cross-platform.
+
+   ```bash
+   npm install @nut-tree/nut-js
+   ```
+
+   ```js
+   const { mouse, left, Point } = require('@nut-tree/nut-js');
+   await mouse.move([new Point(500, 300)]);
+   await mouse.click(left);
+   ```
+
+These libraries allow you to move the cursor, click, and even drag in patterns, enabling an auto-clicker or screen-mover function.
+
+---
+
+### macOS Security Requirements
+
+macOS requires **Accessibility permissions** for any app that simulates mouse or keyboard input:
+
+1. Go to **System Settings → Privacy & Security → Accessibility**.
+2. Add and enable your Electron app.
+
+Without this, macOS will block input simulation entirely. For distribution, you must code-sign and notarize the app.
+
+---
+
+### Swipe Gestures
+
+Directly simulating **macOS trackpad gestures** (like three-finger swipes or Mission Control gestures) is **not possible**. Apple restricts this at the OS level for security.
+
+However, you can simulate **swipe-like actions** depending on the goal.
+
+#### Simulating Swipe Motion (Drag)
+
+You can mimic a swipe motion by dragging the mouse:
+
+```js
+const { mouse, Point, Button } = require('@nut-tree/nut-js');
+
+await mouse.move([new Point(400, 500)]);
+await mouse.pressButton(Button.LEFT);
+for (let x = 400; x < 800; x += 10) {
+  await mouse.move([new Point(x, 500)]);
+}
+await mouse.releaseButton(Button.LEFT);
+```
+
+This simulates a horizontal swipe or drag motion.
+
+#### Simulating Scroll Swipes
+
+You can mimic vertical swipes using scroll simulation:
+
+```js
+const robot = require('robotjs');
+robot.scrollMouse(0, -50); // scroll up
+```
+
+#### Detecting Swipes in Your App
+
+If the swipe gesture is for in-app navigation, you can detect it easily with JavaScript:
+
+```js
+window.addEventListener('touchstart', handleStart);
+window.addEventListener('touchmove', handleMove);
+window.addEventListener('touchend', handleEnd);
+```
+
+Or by using gesture libraries like `hammerjs`, `react-use-gesture`, or `framer-motion`.
+
+---
+
+### Summary Table
+
+| Goal                                                       | Possible? | How                                       |
+| ---------------------------------------------------------- | --------- | ----------------------------------------- |
+| Simulate native macOS swipe gesture (e.g., desktop switch) | ❌ No      | macOS protected                           |
+| Simulate swipe motion (drag/scroll)                        | ✅ Yes     | `nut.js` or `robotjs`                     |
+| Detect or use swipe inside Electron app                    | ✅ Yes     | Touch or gesture libraries                |
+| Scroll page content                                        | ✅ Yes     | `robot.scrollMouse()` or synthetic events |
+
+---
+
+### Key Takeaways
+
+* Electron can simulate mouse movement and clicks with the right Node modules.
+* You must enable macOS Accessibility permissions.
+* You cannot replicate actual trackpad gestures, but you can mimic swipe-like behavior.
+* Always include a safe exit hotkey and avoid using such automation to violate app terms of service.

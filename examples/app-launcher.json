@@ -1,0 +1,40 @@
+[
+  {
+    "type": "keypress",
+    "params": {
+      "key": "space",
+      "modifiers": ["command"]
+    },
+    "description": "Open Spotlight search (Command+Space)"
+  },
+  {
+    "type": "wait",
+    "params": {
+      "duration": 500
+    },
+    "description": "Wait for Spotlight to open"
+  },
+  {
+    "type": "type",
+    "params": {
+      "text": "Safari"
+    },
+    "description": "Type application name"
+  },
+  {
+    "type": "wait",
+    "params": {
+      "duration": 300
+    },
+    "description": "Wait for search results"
+  },
+  {
+    "type": "keypress",
+    "params": {
+      "key": "enter"
+    },
+    "description": "Launch application"
+  }
+]
+
+

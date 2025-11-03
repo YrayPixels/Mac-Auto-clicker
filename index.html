@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auto Mouse</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🖱️ Auto Mouse</h1>
+      <p class="subtitle">Automated Mouse Control for macOS</p>
+      <div class="hotkeys-info">
+        <div class="hotkey-item emergency">
+          <span class="hotkey-badge">⌘ Shift X</span>
+          <span>Emergency Stop All</span>
+        </div>
+        <div class="hotkeys-grid">
+          <div class="hotkey-item">
+            <span class="hotkey-badge-small">⌘ Shift C</span>
+            <span>Toggle Clicker</span>
+          </div>
+          <div class="hotkey-item">
+            <span class="hotkey-badge-small">⌘ Shift M</span>
+            <span>Toggle Mover</span>
+          </div>
+          <div class="hotkey-item">
+            <span class="hotkey-badge-small">⌘ Shift K</span>
+            <span>Toggle Shortcuts</span>
+          </div>
+          <div class="hotkey-item">
+            <span class="hotkey-badge-small">⌘ Shift T</span>
+            <span>Toggle Typing</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Auto Clicker Section -->
+    <section class="card">
+      <h2>🎯 Auto Clicker</h2>
+      <div class="controls">
+        <div class="control-group">
+          <label for="click-interval">Interval (ms)</label>
+          <input type="number" id="click-interval" value="1000" min="10" step="10">
+        </div>
+        
+        <div class="control-group">
+          <label for="click-button">Button</label>
+          <select id="click-button">
+            <option value="left">Left Click</option>
+            <option value="right">Right Click</option>
+          </select>
+        </div>
+        
+        <div class="control-group">
+          <label for="click-count">Clicks per Interval</label>
+          <input type="number" id="click-count" value="1" min="1" max="10">
+        </div>
+      </div>
+      
+      <div class="button-group">
+        <button id="start-clicker" class="btn btn-primary">Start Clicking</button>
+        <button id="stop-clicker" class="btn btn-secondary" disabled>Stop</button>
+      </div>
+      
+      <div id="clicker-status" class="status"></div>
+    </section>
+
+    <!-- Mouse Mover Section -->
+    <section class="card">
+      <h2>🔄 Mouse Mover</h2>
+      <div class="controls">
+        <div class="control-group">
+          <label for="move-pattern">Pattern</label>
+          <select id="move-pattern">
+            <option value="circular">Circular</option>
+            <option value="random">Random</option>
+            <option value="horizontal">Horizontal</option>
+            <option value="vertical">Vertical</option>
+          </select>
+        </div>
+        
+        <div class="control-group">
+          <label for="move-interval">Interval (ms)</label>
+          <input type="number" id="move-interval" value="1000" min="100" step="100">
+        </div>
+        
+        <div class="control-group">
+          <label for="move-range">Range (pixels)</label>
+          <input type="number" id="move-range" value="50" min="10" max="500">
+        </div>
+      </div>
+      
+      <div class="button-group">
+        <button id="start-mover" class="btn btn-primary">Start Moving</button>
+        <button id="stop-mover" class="btn btn-secondary" disabled>Stop</button>
+      </div>
+      
+      <div id="mover-status" class="status"></div>
+    </section>
+
+    <!-- Swipe & Scroll Section -->
+    <section class="card">
+      <h2>👆 Swipe & Scroll</h2>
+      
+      <div class="subsection">
+        <h3>Swipe Simulation</h3>
+        <div class="controls">
+          <div class="control-group">
+            <label for="swipe-distance">Distance (pixels)</label>
+            <input type="number" id="swipe-distance" value="200" min="50" max="1000">
+          </div>
+        </div>
+        <div class="direction-grid">
+          <button class="btn btn-direction" data-direction="up">↑</button>
+          <button class="btn btn-direction" data-direction="left">←</button>
+          <button class="btn btn-direction" data-direction="down">↓</button>
+          <button class="btn btn-direction" data-direction="right">→</button>
+        </div>
+      </div>
+      
+      <div class="subsection">
+        <h3>Scroll</h3>
+        <div class="controls">
+          <div class="control-group">
+            <label for="scroll-amount">Amount</label>
+            <input type="number" id="scroll-amount" value="100" min="10" max="500">
+          </div>
+        </div>
+        <div class="button-group">
+          <button id="scroll-up" class="btn btn-secondary">Scroll Up</button>
+          <button id="scroll-down" class="btn btn-secondary">Scroll Down</button>
+        </div>
+      </div>
+      
+      <div id="swipe-status" class="status"></div>
+    </section>
+
+    <!-- Keyboard Automation Section -->
+    <section class="card">
+      <h2>⌨️ Keyboard Automation</h2>
+      
+      <div class="subsection">
+        <h3>Keyboard Shortcuts</h3>
+        <div class="controls">
+          <div class="control-group">
+            <label for="shortcut-keys">Key Combination</label>
+            <input type="text" id="shortcut-keys" placeholder="e.g. control+right, command+space" readonly>
+            <small id="recording-hint">Type manually or click Record to capture<br>
+            <strong>Arrow keys:</strong> Use right, left, up, down</small>
+          </div>
+          
+          <div class="control-group">
+            <label for="shortcut-interval">Interval (ms)</label>
+            <input type="number" id="shortcut-interval" value="2000" min="100" step="100">
+          </div>
+        </div>
+        
+        <div class="button-group">
+          <button id="record-shortcut" class="btn btn-secondary">🎙️ Record Keys</button>
+          <button id="type-shortcut" class="btn btn-secondary">⌨️ Type Manually</button>
+          <button id="add-shortcut" class="btn btn-primary" disabled>➕ Add to Sequence</button>
+          <button id="clear-shortcuts" class="btn btn-secondary">🗑️ Clear All</button>
+        </div>
+
+        <div id="shortcuts-list" class="shortcuts-list">
+          <div class="list-header">Shortcut Sequence:</div>
+          <div id="shortcuts-items" class="shortcuts-items">
+            <div class="empty-state">No shortcuts added yet</div>
+          </div>
+        </div>
+
+        <div class="button-group">
+          <button id="start-shortcut" class="btn btn-primary" disabled>▶️ Start Sequence</button>
+          <button id="stop-shortcut" class="btn btn-secondary" disabled>⏹️ Stop</button>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Random Typing</h3>
+        <div class="controls">
+          <div class="control-group full-width">
+            <label for="typing-text">Text to Type</label>
+            <textarea id="typing-text" rows="3" placeholder="Enter text to type randomly...">Hello World! This is automated typing.</textarea>
+          </div>
+          
+          <div class="control-group">
+            <label for="typing-min-interval">Min Interval (ms)</label>
+            <input type="number" id="typing-min-interval" value="300" min="50" step="50">
+            <small>~40 WPM at 300ms</small>
+          </div>
+          
+          <div class="control-group">
+            <label for="typing-max-interval">Max Interval (ms)</label>
+            <input type="number" id="typing-max-interval" value="600" min="50" step="50">
+            <small>~20 WPM at 600ms</small>
+          </div>
+        </div>
+        <div class="button-group">
+          <button id="start-typing" class="btn btn-primary">Start Typing</button>
+          <button id="stop-typing" class="btn btn-secondary" disabled>Stop</button>
+        </div>
+      </div>
+      
+      <div id="keyboard-status" class="status"></div>
+    </section>
+
+    <!-- AI Automation Section -->
+    <section class="card">
+      <h2>🤖 AI-Powered Automation</h2>
+      
+      <div class="subsection">
+        <h3>OpenAI API Configuration</h3>
+        <div class="controls">
+          <div class="control-group full-width">
+            <label for="openai-api-key">OpenAI API Key</label>
+            <div class="api-key-input-group">
+              <input type="password" id="openai-api-key" placeholder="sk-...">
+              <button id="toggle-api-key-visibility" class="btn btn-small" title="Show/Hide API Key">👁️</button>
+              <button id="save-api-key" class="btn btn-primary">💾 Save Key</button>
+            </div>
+            <small>Your API key is stored locally and never sent anywhere except OpenAI</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Natural Language Commands</h3>
+        <div class="controls">
+          <div class="control-group full-width">
+            <label for="ai-prompt">Describe what you want to automate</label>
+            <textarea id="ai-prompt" rows="4" placeholder="Example: Click 3 times, wait 1 second, then press Command+Tab, then type 'Hello World' and press Enter"></textarea>
+            <small>Examples:
+              • "Move mouse to 500, 300 and click twice"
+              • "Type 'test@example.com' then press tab and type 'password123'"
+              • "Press Command+Space, wait 500ms, type 'Safari', press Enter"
+              • "Scroll down 200 pixels, wait 1 second, then swipe left 300 pixels"
+            </small>
+          </div>
+        </div>
+        
+        <div class="controls">
+          <div class="control-group">
+            <label for="command-delay">Delay Between Commands (ms)</label>
+            <input type="number" id="command-delay" value="5000" min="0" step="100">
+            <small>Wait time before executing each command</small>
+          </div>
+          
+          <div class="control-group">
+            <label for="loop-count">Repeat Count</label>
+            <select id="loop-count">
+              <option value="1">Once (No Loop)</option>
+              <option value="2">2 times</option>
+              <option value="3">3 times</option>
+              <option value="5">5 times</option>
+              <option value="10">10 times</option>
+              <option value="-1">Infinite Loop</option>
+            </select>
+            <small>Choose how many times to repeat the sequence</small>
+          </div>
+          
+          <div class="control-group">
+            <label for="loop-delay">Loop Delay (ms)</label>
+            <input type="number" id="loop-delay" value="500" min="100" step="100">
+            <small>Delay between each repetition</small>
+          </div>
+        </div>
+        
+        <div class="button-group">
+          <button id="generate-ai-commands" class="btn btn-primary">✨ Generate Commands</button>
+          <button id="execute-ai-commands" class="btn btn-secondary" disabled>▶️ Execute</button>
+          <button id="stop-loop" class="btn btn-secondary" disabled style="display: none;">⏹️ Stop Loop</button>
+          <button id="clear-ai-commands" class="btn btn-secondary" disabled>🗑️ Clear</button>
+        </div>
+
+        <div id="ai-commands-preview" class="commands-preview" style="display: none;">
+          <div class="preview-header">
+            <strong>Generated Commands:</strong>
+            <span id="command-count" class="badge">0</span>
+          </div>
+          <div id="ai-commands-list" class="commands-list"></div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Paste Command Sequence (JSON)</h3>
+        <div class="controls">
+          <div class="control-group full-width">
+            <label for="json-commands">Paste JSON Command Array</label>
+            <textarea id="json-commands" rows="6" placeholder='[
+  {"type": "click", "params": {"button": "left", "count": 2}, "description": "Double click"},
+  {"type": "wait", "params": {"duration": 1000}, "description": "Wait 1 second"},
+  {"type": "type", "params": {"text": "Hello"}, "description": "Type text"}
+]'></textarea>
+            <small>Paste a JSON array of commands to execute directly</small>
+          </div>
+          
+          <div class="control-group">
+            <label for="json-command-delay">Delay Between Commands (ms)</label>
+            <input type="number" id="json-command-delay" value="5000" min="0" step="100">
+            <small>Wait time before executing each command</small>
+          </div>
+          
+          <div class="control-group">
+            <label for="json-loop-count">Repeat Count</label>
+            <select id="json-loop-count">
+              <option value="1">Once (No Loop)</option>
+              <option value="2">2 times</option>
+              <option value="3">3 times</option>
+              <option value="5">5 times</option>
+              <option value="10">10 times</option>
+              <option value="-1">Infinite Loop</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="button-group">
+          <button id="validate-json-commands" class="btn btn-secondary">✓ Validate JSON</button>
+          <button id="execute-json-commands" class="btn btn-primary">▶️ Execute JSON</button>
+          <button id="stop-json-loop" class="btn btn-secondary" disabled style="display: none;">⏹️ Stop Loop</button>
+        </div>
+      </div>
+      
+      <div id="ai-status" class="status"></div>
+    </section>
+
+    <!-- Mouse Position Display -->
+    <section class="card info-card">
+      <div class="mouse-position">
+        <span class="label">Current Position:</span>
+        <span id="mouse-x">0</span>, <span id="mouse-y">0</span>
+        <button id="refresh-position" class="btn btn-small">🔄</button>
+      </div>
+    </section>
+
+    <footer>
+      <p class="warning">⚠️ Requires macOS Accessibility permissions</p>
+    </footer>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
+

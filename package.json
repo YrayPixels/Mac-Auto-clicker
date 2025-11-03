@@ -1,0 +1,106 @@
+{
+  "name": "auto-mouse",
+  "version": "1.0.0",
+  "description": "Auto Mouse - Electron-based auto clicker and mouse mover for macOS",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc",
+    "rebuild": "electron-rebuild -f -w @jitsi/robotjs",
+    "postinstall": "electron-rebuild -f -w @jitsi/robotjs",
+    "start": "npm run build && electron .",
+    "dev": "tsc && electron . --dev",
+    "watch": "tsc --watch",
+    "pack:mas": "npm run build && electron-builder --mac mas",
+    "dist:mas": "npm run build && electron-builder --mac mas --publish never",
+    "pack:dmg": "npm run build && electron-builder --mac dmg",
+    "dist:dmg": "npm run build && electron-builder --mac dmg --publish never"
+  },
+  "keywords": [
+    "electron",
+    "automation",
+    "mouse",
+    "clicker"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "electron": "^28.0.0",
+    "electron-builder": "^26.0.12",
+    "electron-notarize": "^1.2.2",
+    "electron-rebuild": "^3.2.9",
+    "typescript": "^5.3.0"
+  },
+  "dependencies": {
+    "@jitsi/robotjs": "^0.6.14"
+  },
+  "build": {
+    "appId": "com.automouse.app",
+    "productName": "Auto Mouse",
+    "afterSign": null,
+    "mac": {
+      "category": "public.app-category.utilities",
+      "target": [
+        {
+          "target": "mas",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "type": "distribution",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.dmg.plist",
+      "entitlementsInherit": "build/entitlements.dmg.plist",
+      "icon": "build/icon.icns"
+    },
+    "mas": {
+      "entitlements": "build/entitlements.mas.plist",
+      "entitlementsInherit": "build/entitlements.mas.inherit.plist",
+      "hardenedRuntime": false,
+      "type": "distribution",
+      "category": "public.app-category.utilities"
+    },
+    "dmg": {
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "files": [
+      "dist/**/*",
+      "index.html",
+      "styles.css",
+      "renderer.js",
+      "node_modules/**/*",
+      "!node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+      "!node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+      "!node_modules/*.d.ts",
+      "!node_modules/.bin",
+      "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
+      "!.editorconfig",
+      "!**/._*",
+      "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
+      "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
+      "!**/{appveyor.yml,.travis.yml,circle.yml}",
+      "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
+    ]
+  }
+}

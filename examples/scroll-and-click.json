@@ -1,0 +1,50 @@
+[
+  {
+    "type": "scroll",
+    "params": {
+      "direction": "down",
+      "amount": 300
+    },
+    "description": "Scroll down 300 pixels"
+  },
+  {
+    "type": "wait",
+    "params": {
+      "duration": 500
+    },
+    "description": "Wait for content to load"
+  },
+  {
+    "type": "moveTo",
+    "params": {
+      "x": 640,
+      "y": 400
+    },
+    "description": "Move to button position"
+  },
+  {
+    "type": "click",
+    "params": {
+      "button": "left",
+      "count": 1
+    },
+    "description": "Click the button"
+  },
+  {
+    "type": "wait",
+    "params": {
+      "duration": 1000
+    },
+    "description": "Wait for page transition"
+  },
+  {
+    "type": "scroll",
+    "params": {
+      "direction": "up",
+      "amount": 200
+    },
+    "description": "Scroll back up"
+  }
+]
+
+

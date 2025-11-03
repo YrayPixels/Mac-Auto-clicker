@@ -1,0 +1,41 @@
+[
+  {
+    "type": "moveTo",
+    "params": {
+      "x": 500,
+      "y": 300
+    },
+    "description": "Move cursor to coordinates (500, 300)"
+  },
+  {
+    "type": "click",
+    "params": {
+      "button": "left",
+      "count": 2
+    },
+    "description": "Double click at current position"
+  },
+  {
+    "type": "wait",
+    "params": {
+      "duration": 1000
+    },
+    "description": "Wait 1 second"
+  },
+  {
+    "type": "type",
+    "params": {
+      "text": "Hello, World!"
+    },
+    "description": "Type greeting message"
+  },
+  {
+    "type": "keypress",
+    "params": {
+      "key": "enter"
+    },
+    "description": "Press Enter key"
+  }
+]
+
+
