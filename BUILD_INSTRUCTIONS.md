@@ -1,6 +1,6 @@
 # Building Auto Mouse for Distribution
 
-This guide explains how to build and distribute your Auto Mouse app for macOS.
+This guide explains how to build and distribute your Auto Mouse app for macOS and Windows.
 
 ## Prerequisites
 
@@ -182,6 +182,102 @@ Users can download and drag the app to their Applications folder.
 
 ---
 
+## Windows Distribution
+
+Building for Windows is simpler than macOS as it doesn't require code signing certificates (though signing is recommended for better security).
+
+### Prerequisites
+
+1. **Windows Machine** (or Windows VM/CI)
+   - Windows 10/11 recommended
+   - Node.js and npm installed
+
+2. **Optional: Code Signing Certificate**
+   - Not required, but recommended for distribution
+   - Prevents Windows Defender warnings
+   - Purchase from certificate authorities like DigiCert, Sectigo, etc.
+
+### Step 1: Create Windows Icon
+
+1. Create a 256x256 PNG icon for your app
+2. Convert to `.ico` format:
+   - Use online tools like https://convertio.co/png-ico/
+   - Or use ImageMagick: `magick convert icon.png -define icon:auto-resize=256,128,64,48,32,16 build/icon.ico`
+   - Save as `build/icon.ico`
+
+### Step 2: Build Windows Installer (NSIS)
+
+```bash
+# Make sure your code is compiled
+npm run build
+
+# Build the Windows installer
+npm run dist:win
+```
+
+This creates:
+- `dist/Auto Mouse Setup 1.0.0.exe` - NSIS installer (x64 and ia32)
+- `dist/win-unpacked/` - Unpacked app directory
+
+### Step 3: Build Portable Version (Optional)
+
+```bash
+# Build portable executable (no installer needed)
+npm run dist:portable
+```
+
+This creates:
+- `dist/Auto Mouse 1.0.0.exe` - Portable executable (x64)
+
+### Step 4: Code Signing (Optional but Recommended)
+
+If you have a code signing certificate:
+
+```bash
+# Sign the installer
+signtool sign /f certificate.pfx /p password /t http://timestamp.digicert.com "dist/Auto Mouse Setup 1.0.0.exe"
+
+# Sign the portable executable
+signtool sign /f certificate.pfx /p password /t http://timestamp.digicert.com "dist/Auto Mouse 1.0.0.exe"
+```
+
+Or set environment variables for automatic signing:
+
+```bash
+# Set certificate path and password
+export CSC_LINK=/path/to/certificate.pfx
+export CSC_KEY_PASSWORD=your_password
+
+# Build will automatically sign
+npm run dist:win
+```
+
+### Step 5: Distribute
+
+Upload the installer/executable to:
+- Your website
+- GitHub Releases
+- Other download platforms
+
+**Note for Users**: Windows may show a "Windows protected your PC" warning for unsigned apps. Users need to click "More info" → "Run anyway" for the first launch.
+
+### Windows-Specific Considerations
+
+1. **Antivirus Warnings**: Unsigned automation apps may trigger antivirus warnings. Code signing helps reduce false positives.
+
+2. **Permissions**: Windows doesn't require explicit accessibility permissions like macOS, but the app may need to run with appropriate privileges.
+
+3. **Desktop Switching**: The macOS-specific Control+Arrow desktop switching feature won't work on Windows. Users can still use other keyboard shortcuts.
+
+### Benefits of Windows Distribution:
+- ✅ No code signing required (but recommended)
+- ✅ Simple installer creation
+- ✅ Portable executable option available
+- ✅ No app store restrictions
+- ✅ Wide user base
+
+---
+
 ## Testing Before Distribution
 
 ### Test the Build Locally
@@ -201,6 +297,23 @@ Before distributing, test on a Mac that doesn't have development tools:
 2. Install the app
 3. Verify all features work
 4. Check that permissions dialogs appear correctly
+
+### Test Windows Build
+
+```bash
+# Build and test Windows installer
+npm run pack:win
+
+# Test the installer on a clean Windows machine
+# Install from dist/Auto Mouse Setup 1.0.0.exe
+```
+
+Before distributing Windows builds:
+1. Test on a clean Windows machine (VM or separate computer)
+2. Install the app
+3. Verify all features work
+4. Check that automation features function correctly
+5. Test both NSIS installer and portable versions
 
 ---
 
@@ -230,6 +343,8 @@ If submitting to Mac App Store, review these guidelines:
 
 For automated builds, you can set these environment variables:
 
+### macOS
+
 ```bash
 # For signing
 export CSC_LINK=/path/to/certificate.p12
@@ -241,18 +356,38 @@ export APPLE_ID_PASSWORD=app-specific-password
 export APPLE_TEAM_ID=YOUR_TEAM_ID
 ```
 
+### Windows
+
+```bash
+# For code signing (optional)
+export CSC_LINK=/path/to/certificate.pfx
+export CSC_KEY_PASSWORD=certificate_password
+
+# For timestamp server
+export CSC_TIMESTAMP_SERVER=http://timestamp.digicert.com
+```
+
 ---
 
 ## Next Steps
 
+### For macOS:
 1. Choose your distribution method (App Store vs Direct)
 2. Set up code signing certificates
-3. Create an app icon (1024x1024 PNG)
+3. Create an app icon (1024x1024 PNG → .icns)
 4. Build and test locally
 5. Notarize (for direct) or submit (for App Store)
 6. Distribute to users
 
+### For Windows:
+1. Create Windows icon (256x256 PNG → .ico)
+2. Build installer or portable executable
+3. Optionally sign with code signing certificate
+4. Test on clean Windows machine
+5. Distribute to users
+
 For questions or issues, refer to:
 - electron-builder docs: https://www.electron.build
 - Apple Developer docs: https://developer.apple.com/documentation
+- Windows Code Signing: https://docs.microsoft.com/en-us/windows/win32/seccrypto/cryptography-tools
 

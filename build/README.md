@@ -14,7 +14,7 @@ This directory contains assets needed for building and distributing Auto Mouse.
    - macOS icon file
    - Generate from a 1024x1024 PNG using `iconutil`
 
-### For Direct Distribution
+### For Direct Distribution (macOS)
 
 1. **icon.icns** (Required)
    - Same as above
@@ -22,6 +22,13 @@ This directory contains assets needed for building and distributing Auto Mouse.
 2. **Developer ID Certificate** (Required)
    - Managed through Xcode/Keychain Access
    - Not stored in this directory
+
+### For Windows Distribution
+
+1. **icon.ico** (Required)
+   - Windows icon file
+   - Generate from a 256x256 PNG (or larger)
+   - Should include multiple sizes: 16x16, 32x32, 48x48, 256x256
 
 ## Files Already Included
 
@@ -58,7 +65,47 @@ iconutil -c icns MyIcon.iconset -o icon.icns
 mv icon.icns ./build/
 ```
 
-### Alternative: Use Online Tools
+### From PNG to ICO (Windows)
+
+#### Option 1: Using ImageMagick (Cross-platform)
+
+```bash
+# Install ImageMagick first: brew install imagemagick (macOS) or download from imagemagick.org
+
+# Create ICO with multiple sizes
+magick convert icon-256.png -define icon:auto-resize=256,128,64,48,32,16 build/icon.ico
+```
+
+#### Option 2: Using Online Tools
+
+- https://convertio.co/png-ico/
+- https://icoconvert.com/
+- https://www.icoconverter.com/
+
+Upload your PNG (256x256 or larger) and download the .ico file, then save as `build/icon.ico`
+
+#### Option 3: Using macOS sips (if you have a PNG)
+
+```bash
+# Create a temporary iconset
+mkdir temp-icon.iconset
+
+# Generate sizes
+sips -z 16 16   icon-256.png --out temp-icon.iconset/icon_16x16.png
+sips -z 32 32   icon-256.png --out temp-icon.iconset/icon_32x32.png
+sips -z 48 48   icon-256.png --out temp-icon.iconset/icon_48x48.png
+sips -z 128 128 icon-256.png --out temp-icon.iconset/icon_128x128.png
+sips -z 256 256 icon-256.png --out temp-icon.iconset/icon_256x256.png
+
+# Then use an online converter or ImageMagick to convert to .ico
+# Or use: iconutil -c iconset temp-icon.iconset (but this creates .iconset, not .ico)
+```
+
+#### Option 4: Using Node.js script
+
+See `scripts/create-windows-icon.js` for an automated solution.
+
+### Alternative: Use Online Tools (macOS)
 
 - https://cloudconvert.com/png-to-icns
 - https://iconverticons.com/online/

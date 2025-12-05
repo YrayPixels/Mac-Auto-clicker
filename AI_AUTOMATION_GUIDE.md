@@ -26,7 +26,7 @@ Auto Mouse now includes powerful AI-powered automation capabilities that allow y
    - It's never sent anywhere except directly to OpenAI's API
 
 ## Using Natural Language Commands
-
+r
 ### How It Works
 
 Simply describe what you want to automate in plain English. The AI (powered by GPT-4o-mini) will convert your description into a sequence of automation commands.

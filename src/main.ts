@@ -343,10 +343,11 @@ ipcMain.handle('start-keyboard-shortcut', async (_event: IpcMainInvokeEvent, opt
           // Apply modifier mapping
           modifiers = modifiers.map(mod => modifierMap[mod] || mod);
           
-          // Special handling for desktop switching (Control+Arrow doesn't work via robotjs)
+          // Special handling for desktop switching (Control+Arrow doesn't work via robotjs on macOS)
           const isDesktopSwitch = modifiers.includes('control') && ['left', 'right'].includes(key);
           
-          if (isDesktopSwitch) {
+          if (isDesktopSwitch && process.platform === 'darwin') {
+            // macOS-specific: Use AppleScript for Control+Arrow desktop switching
             const direction = key === 'left' ? 'previous' : 'next';
             const appleScript = `
               tell application "System Events"
@@ -583,8 +584,8 @@ ipcMain.handle('execute-command-sequence', async (_event: IpcMainInvokeEvent, co
             // Special handling for Control+Arrow (desktop switching on macOS)
             const isDesktopSwitch = mappedModifiers.includes('control') && ['left', 'right'].includes(mappedKey);
             
-            if (isDesktopSwitch) {
-              // Use AppleScript for Control+Arrow which robotjs can't handle properly
+            if (isDesktopSwitch && process.platform === 'darwin') {
+              // macOS-specific: Use AppleScript for Control+Arrow which robotjs can't handle properly
               const direction = mappedKey === 'left' ? 'previous' : 'next';
               const appleScript = `
                 tell application "System Events"

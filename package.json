@@ -1,7 +1,7 @@
 {
   "name": "auto-mouse",
   "version": "1.0.0",
-  "description": "Auto Mouse - Electron-based auto clicker and mouse mover for macOS",
+  "description": "Auto Mouse - Electron-based auto clicker and mouse mover for macOS and Windows",
   "main": "dist/main.js",
   "scripts": {
     "build": "tsc",
@@ -13,7 +13,12 @@
     "pack:mas": "npm run build && electron-builder --mac mas",
     "dist:mas": "npm run build && electron-builder --mac mas --publish never",
     "pack:dmg": "npm run build && electron-builder --mac dmg",
-    "dist:dmg": "npm run build && electron-builder --mac dmg --publish never"
+    "dist:dmg": "npm run build && electron-builder --mac dmg --publish never",
+    "pack:win": "npm run build && electron-builder --win",
+    "dist:win": "npm run build && electron-builder --win --publish never",
+    "pack:portable": "npm run build && electron-builder --win portable",
+    "dist:portable": "npm run build && electron-builder --win portable --publish never",
+    "create-win-icon": "node scripts/create-windows-icon.js"
   },
   "keywords": [
     "electron",
@@ -83,6 +88,30 @@
           "path": "/Applications"
         }
       ]
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
     },
     "files": [
       "dist/**/*",
