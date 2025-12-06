@@ -43,20 +43,21 @@
       <div class="controls">
         <div class="control-group">
           <label for="click-interval">Interval (ms)</label>
-          <input type="number" id="click-interval" value="1000" min="10" step="10">
+          <input type="number" id="click-interval" value="5000" min="10" step="10">
         </div>
         
         <div class="control-group">
           <label for="click-button">Button</label>
           <select id="click-button">
             <option value="left">Left Click</option>
-            <option value="right">Right Click</option>
+            <option value="right" selected>Right Click</option>
           </select>
         </div>
         
         <div class="control-group">
           <label for="click-count">Clicks per Interval</label>
-          <input type="number" id="click-count" value="1" min="1" max="10">
+          <input type="number" id="click-count" value="1" min="1" max="10" disabled>
+          <small>Random 1-5 clicks per interval</small>
         </div>
       </div>
       

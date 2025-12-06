@@ -110,13 +110,16 @@ ipcMain.handle('start-auto-click', async (_event: IpcMainInvokeEvent, options: A
   try {
     stopAllAutomation();
     
-    const { interval, button, clickCount } = options;
+    const { interval, button } = options;
     
     autoClickInterval = setInterval(() => {
       try {
-        for (let i = 0; i < clickCount; i++) {
+        // Generate random number of clicks between 1-5 for each interval
+        const randomClickCount = Math.floor(Math.random() * 5) + 1;
+        
+        for (let i = 0; i < randomClickCount; i++) {
           robot.mouseClick(button);
-          if (clickCount > 1) {
+          if (randomClickCount > 1) {
             robot.setMouseDelay(50);
           }
         }

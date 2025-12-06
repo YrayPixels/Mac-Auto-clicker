@@ -40,20 +40,22 @@ function showStatus(element, message, isError = false) {
 // Auto Clicker
 startClickerBtn.addEventListener('click', async () => {
   const interval = parseInt(document.getElementById('click-interval').value);
-  const button = document.getElementById('click-button').value;
-  const clickCount = parseInt(document.getElementById('click-count').value);
+  const button = document.getElementById("click-button").value;
 
   const result = await window.electronAPI.startAutoClick({
     interval,
     button,
-    clickCount
+    clickCount: 1, // Not used anymore, but kept for API compatibility
   });
 
   if (result.success) {
     isClickerActive = true;
     startClickerBtn.disabled = true;
     stopClickerBtn.disabled = false;
-    showStatus(clickerStatus, `Auto clicking with ${button} button every ${interval}ms`);
+    showStatus(
+      clickerStatus,
+      `Auto clicking with ${button} button (1-5 random clicks) every ${interval}ms`
+    );
   } else {
     showStatus(clickerStatus, `Error: ${result.error}`, true);
   }
